@@ -91,6 +91,9 @@ for dataset in dataset_list:
         # load the data
         points = np.loadtxt(os.path.join(curvatures_gt_path, shape + '.xyz')).astype('float32')
         curvatures_gt = np.loadtxt(os.path.join(curvatures_gt_path, shape + '.curv')).astype('float32')
+        print(f"YYYYYYYYYYYYYYYYYYYY")
+        print(os.path.join(curv_results_path, shape + '.curv'))
+        print(f"YYYYYYYYYYYYYYYYYYYY")
         curvatures_results = np.loadtxt(os.path.join(curv_results_path, shape + '.curv')).astype('float32')
         points_idx = np.loadtxt(os.path.join(curvatures_gt_path, shape + '.pidx')).astype('int')
 

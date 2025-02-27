@@ -111,6 +111,9 @@ for dataset in dataset_list:
         # load the data
         points = np.loadtxt(os.path.join(normal_gt_path, shape + '.xyz')).astype('float32')
         normals_gt = np.loadtxt(os.path.join(normal_gt_path, shape + '.normals')).astype('float32')
+        print(f"XXXXXXXXXXXXXXXXXXXXX")
+        print(os.path.join(normal_results_path, shape + '.normals'))
+        print(f"XXXXXXXXXXXXXXXXXXXXX")
         normals_results = np.loadtxt(os.path.join(normal_results_path, shape + '.normals')).astype('float32')
         points_idx = np.loadtxt(os.path.join(normal_gt_path, shape + '.pidx')).astype('int')
 
