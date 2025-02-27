@@ -220,7 +220,8 @@ def compute_principal_curvatures(beta):
 
             M_weingarten = -torch.bmm(torch.inverse(I), II)
 
-            curvatures, dirs = torch.symeig(M_weingarten, eigenvectors=True)
+            # Replace deprecated torch.symeig with torch.linalg.eigh
+            curvatures, dirs = torch.linalg.eigh(M_weingarten, UPLO='L')
             dirs = torch.cat([dirs, torch.zeros(dirs.shape[0], 2, 1, device=dirs.device)], dim=2) # pad zero in the normal direction
 
     return curvatures, dirs
