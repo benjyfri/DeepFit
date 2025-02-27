@@ -75,7 +75,9 @@ def test_n_est(opt):
         torch.manual_seed(opt.seed)
 
         # load model and training parameters
-
+        print(f"QQQQQQQQQQQQQQQQQQQQQQQQ")
+        print(f"{param_filename}")
+        print(f"{param_filename}")
         trainopt = torch.load(param_filename)
         if not hasattr(trainopt, 'arch'):
             trainopt.arch = 'simple'
