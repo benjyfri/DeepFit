@@ -34,7 +34,7 @@ BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 BASELINE_DIR = os.path.dirname(os.path.abspath(__file__))
 
 parser = argparse.ArgumentParser()
-parser.add_argument('--data_path', type=str, default='/content/Deepfit/file_set_lists/', help='Relative path to data directory')
+parser.add_argument('--data_path', type=str, default='/content/DeepFit/file_set_lists/', help='Relative path to data directory')
 parser.add_argument('--sparse_patches', default=True, help='sparse patches indicator, choose True for pcpnet evaluation'
                                                            ',False does not apply if test was not full')
 parser.add_argument('--results_path', default='./log/baselines/DeepFit/results/', help='path to trained model')
