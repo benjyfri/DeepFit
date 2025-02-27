@@ -23,7 +23,7 @@ BASE_DIR_PATH = Path(BASE_DIR)
 sys.path.append(BASE_DIR)
 sys.path.append(os.path.join(BASE_DIR_PATH, 'models'))
 sys.path.append(os.path.join(BASE_DIR, 'utils'))
-import utils.normal_estimation_utils
+import utils.normal_estimation_utils as normal_estimation_utils
 import models.DeepFit as DeepFit
 
 from dataset import PointcloudPatchDataset, RandomPointcloudPatchSampler, SequentialShapeRandomPointcloudPatchSampler, SequentialPointcloudPatchSampler
