@@ -10,7 +10,7 @@ import sys
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 sys.path.append(BASE_DIR)
 sys.path.append(os.path.join(BASE_DIR, 'utils'))
-import visualization
+import utils.visualization
 import utils
 
 
@@ -27,7 +27,7 @@ BASE_DIR = os.path.abspath(os.path.join(BASELINE_DIR, os.pardir))
 # python3 evaluate.py --normal_results_path './log/jetnet_nci_new3/ablations/Deepfit_simple_sigmoid_cr_log_d1_p64_Lsin/results/'
 parser = argparse.ArgumentParser()
 parser.add_argument('--normal_results_path', type=str, default='./log/baselines/Lenssen et. al./', help='Log dir [default: log]')
-parser.add_argument('--data_path', type=str, default='/home/sitzikbs/Datasets/pcpnet/', help='Relative path to data directory')
+parser.add_argument('--data_path', type=str, default='/content/Deepfit/Datasets/pcpnet/', help='Relative path to data directory')
 parser.add_argument('--sparse_patches', type=int, default=True, help='Evaluate on a sparse subset or on the entire point cloud')
 parser.add_argument('--dataset_list', type=str,
                     default=['testset_no_noise', 'testset_low_noise', 'testset_med_noise', 'testset_high_noise',

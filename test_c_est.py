@@ -19,8 +19,8 @@ sys.path.append(BASE_DIR)
 sys.path.append(os.path.join(BASE_DIR_PATH.parent, 'models'))
 sys.path.append(os.path.join(BASE_DIR, 'utils'))
 from dataset import PointcloudPatchDataset, SequentialShapeRandomPointcloudPatchSampler, SequentialPointcloudPatchSampler
-import DeepFit
-import normal_estimation_utils
+import models.DeepFit
+import utils.normal_estimation_utils
 
 # Exection
 # python3 test_c_est.py --models 'Deepfit_knn_lr0.001_sigmoid_cr_log_d3_p256_Lsin' --logdir './log/jetnet_nci_new3/ablations/' --sparse_patches 1 --testset 'testset_all.txt'
