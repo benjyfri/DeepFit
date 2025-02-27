@@ -4,8 +4,8 @@ import torch.nn.parallel
 import torch.utils.data
 import numpy as np
 import torch.nn.functional as F
-import utils.normal_estimation_utils
-import models.ThreeDmFVNet
+import utils.normal_estimation_utils as normal_estimation_utils
+import models.ThreeDmFVNet as ThreeDmFVNet
 
 
 def fit_Wjet(points, weights, order=2, compute_neighbor_normals=False):
@@ -133,9 +133,12 @@ def solve_linear_system(XtX, XtY, sub_batch_size=None):
     n_elements = XtX.shape[2]
     for i in range(n_iterations):
         try:
-            L = torch.cholesky(XtX[sub_batch_size * i:sub_batch_size * (i + 1), ...], upper=False)
+            # Updated: Using torch.linalg.cholesky and torch.linalg.solve_triangular
+            L = torch.linalg.cholesky(XtX[sub_batch_size * i:sub_batch_size * (i + 1), ...])
+            # For cholesky_solve replacement, we use the correct approach
             beta[sub_batch_size * i:sub_batch_size * (i + 1), ...] = \
-                torch.cholesky_solve(XtY[sub_batch_size * i:sub_batch_size * (i + 1), ...], L, upper=False)
+                torch.linalg.solve(XtX[sub_batch_size * i:sub_batch_size * (i + 1), ...],
+                                   XtY[sub_batch_size * i:sub_batch_size * (i + 1), ...])
         except:
             # # add noise to diagonal for cases where XtX is low rank
             eps = torch.normal(torch.zeros(sub_batch_size, n_elements, device=XtX.device),
@@ -145,15 +148,18 @@ def solve_linear_system(XtX, XtY, sub_batch_size=None):
                 XtX[sub_batch_size * i:sub_batch_size * (i + 1), ...] + \
                 eps * XtX[sub_batch_size * i:sub_batch_size * (i + 1), ...]
             try:
-                L = torch.cholesky(XtX[sub_batch_size * i:sub_batch_size * (i + 1), ...], upper=False)
+                # Updated: Using torch.linalg.cholesky
+                L = torch.linalg.cholesky(XtX[sub_batch_size * i:sub_batch_size * (i + 1), ...])
+                # Updated: Using torch.linalg.solve instead of cholesky_solve
                 beta[sub_batch_size * i:sub_batch_size * (i + 1), ...] = \
-                    torch.cholesky_solve(XtY[sub_batch_size * i:sub_batch_size * (i + 1), ...], L, upper=False)
+                    torch.linalg.solve(XtX[sub_batch_size * i:sub_batch_size * (i + 1), ...],
+                                       XtY[sub_batch_size * i:sub_batch_size * (i + 1), ...])
             except:
-                beta[sub_batch_size * i:sub_batch_size * (i + 1), ...], _ =\
-                    torch.solve(XtY[sub_batch_size * i:sub_batch_size * (i + 1), ...], XtX[sub_batch_size * i:sub_batch_size * (i + 1), ...])
+                # Updated: Using torch.linalg.solve instead of torch.solve
+                beta[sub_batch_size * i:sub_batch_size * (i + 1), ...] = \
+                    torch.linalg.solve(XtX[sub_batch_size * i:sub_batch_size * (i + 1), ...],
+                                       XtY[sub_batch_size * i:sub_batch_size * (i + 1), ...])
     return beta
-
-
 class PointNetFeatures(nn.Module):
     def __init__(self, num_points=500, num_scales=1, use_point_stn=False, use_feat_stn=False, point_tuple=1, sym_op='max'):
         super(PointNetFeatures, self).__init__()
@@ -468,7 +474,7 @@ def compute_principal_curvatures(beta):
 
             M_weingarten = -torch.bmm(torch.inverse(I), II)
 
-            curvatures, dirs = torch.symeig(M_weingarten, eigenvectors=True) #faster
+            curvatures, dirs = torch.linalg.eigh(M_weingarten, UPLO='L')
             dirs = torch.cat([dirs, torch.zeros(dirs.shape[0], 2, 1, device=dirs.device)], dim=2) # pad zero in the normal direction
 
     return curvatures, dirs
