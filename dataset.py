@@ -284,7 +284,7 @@ class PointcloudPatchDataset(data.Dataset):
         patch_pts_valid = []
 
         scale_ind_range = np.zeros([len(self.patch_radius_absolute[shape_ind]), 2], dtype='int')
-        effective_points_num = np.array([], dtype=np.int)
+        effective_points_num = np.array([], dtype=int)
         for s, rad in enumerate(self.patch_radius_absolute[shape_ind]):
             if self.neighbor_search_method == 'r':
                 patch_point_inds = np.array(shape.kdtree.query_ball_point(shape.pts[center_point_ind, :], rad))
