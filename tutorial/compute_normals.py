@@ -34,7 +34,7 @@ if args.mode == 'DeepFit':
     params = torch.load(os.path.join(args.trained_model_path, 'DeepFit_params.pth'))
     jet_order = params.jet_order
     print('Using {} order jet for surface fitting'.format(jet_order))
-    model = DeepFit.DeepFit(k=1, num_points=args.k_neighbors, use_point_stn=params.use_point_stn,
+    model = models.DeepFit.DeepFit(k=1, num_points=args.k_neighbors, use_point_stn=params.use_point_stn,
                             use_feat_stn=params.use_feat_stn, point_tuple=params.point_tuple, sym_op=params.sym_op,
                             arch=params.arch, n_gaussians=params.n_gaussians, jet_order=jet_order,
                             weight_mode=params.weight_mode, use_consistency=False)
@@ -69,7 +69,7 @@ for batchind, data in enumerate(dataloader, 0):
         normals = n_est if batchind == 0 else torch.cat([normals, n_est], 0)
     else:
         # Classic, non-weighted jet
-        beta, n_est, neighbors_n_est = DeepFit.fit_Wjet(points, torch.ones_like(points[:, 0]), order=jet_order,
+        beta, n_est, neighbors_n_est = models.DeepFit.fit_Wjet(points, torch.ones_like(points[:, 0]), order=jet_order,
                                    compute_neighbor_normals=False)
         n_est = torch.bmm(n_est.unsqueeze(1), data_trans.transpose(2, 1)).squeeze(dim=1)  # cancel out pca
         n_est = n_est.detach().cpu()
