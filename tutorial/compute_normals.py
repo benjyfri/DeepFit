@@ -9,7 +9,7 @@ import numpy as np
 sys.path.insert(0, '../utils')
 sys.path.insert(0, '../models')
 sys.path.insert(0, '../trained_models')
-import DeepFit
+import models.DeepFit
 import tutorial_utils as tu
 import torch
 import argparse
